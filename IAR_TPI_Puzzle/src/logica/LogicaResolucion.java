@@ -8,7 +8,7 @@ import soporte.*;
 
 //* @author Angelino Marcio, Pavon Rosenthal Joel
 
-public class Puzzle9IUA_Prueba {
+public class LogicaResolucion {
 
     public static void main(String[] args) {
         
