@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import soporte.*;
 
-//* @author Bajo, 
+//* @author 
 
 public class LogicaResolucion {
 
