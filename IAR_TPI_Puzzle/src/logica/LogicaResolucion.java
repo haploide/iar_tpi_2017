@@ -6,10 +6,19 @@ import java.util.Arrays;
 import java.util.Collections;
 import soporte.*;
 
-//* @author Angelino Marcio, Pavon Rosenthal Joel
+//* @author Bajo, 
 
 public class LogicaResolucion {
 
+    private javax.swing.JTextArea jTxtSolucion;
+    
+    public LogicaResolucion(javax.swing.JTextArea txt){
+        jTxtSolucion=txt;
+    }
+    
+    public void agregarTexto(String texto){
+        jTxtSolucion.append(texto+"\n");
+    }
     public static void main(String[] args) {
         
         Scanner sc = new Scanner(System.in);  //crear un objeto Scanner
@@ -1035,6 +1044,8 @@ public class LogicaResolucion {
         }
         
     }
+
+    
    
   
 }
