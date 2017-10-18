@@ -22,7 +22,7 @@ public class InterfazPuzzle extends javax.swing.JFrame
         initComponents();
 
         solucion = new LogicaResolucion(jTxtSolucion);
-        
+
         introduccion();
     }
 
@@ -59,11 +59,14 @@ public class InterfazPuzzle extends javax.swing.JFrame
         jTxtCI6 = new javax.swing.JTextField();
         jTxtCI7 = new javax.swing.JTextField();
         jTxtCI8 = new javax.swing.JTextField();
-        jTxtCI0 = new javax.swing.JTextField();
+        jTxtCI9 = new javax.swing.JTextField();
         jPnlMetodos = new javax.swing.JPanel();
         jCmbMetodos = new javax.swing.JComboBox<>();
         jPnlParam = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jTxtProfMax = new javax.swing.JTextField();
+        jTxtCantMaxExplorar = new javax.swing.JTextField();
         jPnlBotones = new javax.swing.JPanel();
         jBtnResolver = new javax.swing.JButton();
         jBtnReiniciar = new javax.swing.JButton();
@@ -167,6 +170,16 @@ public class InterfazPuzzle extends javax.swing.JFrame
                 .addGap(19, 19, 19))
         );
 
+        confFinalArray[0][0]=jTxtCF1;
+        confFinalArray[0][1]=jTxtCF2;
+        confFinalArray[0][2]=jTxtCF3;
+        confFinalArray[1][0]=jTxtCF4;
+        confFinalArray[1][1]=jTxtCF5;
+        confFinalArray[1][2]=jTxtCF6;
+        confFinalArray[2][0]=jTxtCF7;
+        confFinalArray[2][1]=jTxtCF8;
+        confFinalArray[2][2]=jTxtCF9;
+
         jPnlCI.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Configuración Inicial"));
 
         jTxtCI1.setText("1");
@@ -185,7 +198,7 @@ public class InterfazPuzzle extends javax.swing.JFrame
 
         jTxtCI8.setText("7");
 
-        jTxtCI0.setText("8");
+        jTxtCI9.setText("8");
 
         javax.swing.GroupLayout jPnlCILayout = new javax.swing.GroupLayout(jPnlCI);
         jPnlCI.setLayout(jPnlCILayout);
@@ -199,7 +212,7 @@ public class InterfazPuzzle extends javax.swing.JFrame
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTxtCI8, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTxtCI0, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))
+                        .addComponent(jTxtCI9, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))
                     .addGroup(jPnlCILayout.createSequentialGroup()
                         .addComponent(jTxtCI4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -231,9 +244,19 @@ public class InterfazPuzzle extends javax.swing.JFrame
                 .addGroup(jPnlCILayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTxtCI7)
                     .addComponent(jTxtCI8)
-                    .addComponent(jTxtCI0))
+                    .addComponent(jTxtCI9))
                 .addGap(19, 19, 19))
         );
+
+        confInicialArray[0][0]=jTxtCI1;
+        confInicialArray[0][1]=jTxtCI2;
+        confInicialArray[0][2]=jTxtCI3;
+        confInicialArray[1][0]=jTxtCI4;
+        confInicialArray[1][1]=jTxtCI5;
+        confInicialArray[1][2]=jTxtCI6;
+        confInicialArray[2][0]=jTxtCI7;
+        confInicialArray[2][1]=jTxtCI8;
+        confInicialArray[2][2]=jTxtCI9;
 
         jPnlMetodos.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Método de Resolución"));
 
@@ -267,26 +290,53 @@ public class InterfazPuzzle extends javax.swing.JFrame
 
         jLabel1.setText("Profundidad MAXIMA:");
 
+        jLabel2.setText("Cantidad MAXIMA de Nodos Explorar:");
+
+        jTxtProfMax.setText("4");
+
+        jTxtCantMaxExplorar.setText("100");
+
         javax.swing.GroupLayout jPnlParamLayout = new javax.swing.GroupLayout(jPnlParam);
         jPnlParam.setLayout(jPnlParamLayout);
         jPnlParamLayout.setHorizontalGroup(
             jPnlParamLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPnlParamLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addGroup(jPnlParamLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPnlParamLayout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addComponent(jTxtProfMax, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPnlParamLayout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addComponent(jTxtCantMaxExplorar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPnlParamLayout.setVerticalGroup(
             jPnlParamLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPnlParamLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addContainerGap(308, Short.MAX_VALUE))
+                .addGroup(jPnlParamLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jTxtProfMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
+                .addGroup(jPnlParamLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jTxtCantMaxExplorar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(250, Short.MAX_VALUE))
         );
 
         jPnlBotones.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder()));
 
         jBtnResolver.setText("Resolver");
+        jBtnResolver.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                jBtnResolverMouseClicked(evt);
+            }
+        });
 
         jBtnReiniciar.setText("Reiniciar");
         jBtnReiniciar.addMouseListener(new java.awt.event.MouseAdapter()
@@ -372,6 +422,7 @@ public class InterfazPuzzle extends javax.swing.JFrame
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void introduccion()
@@ -384,6 +435,37 @@ public class InterfazPuzzle extends javax.swing.JFrame
         solucion.agregarTexto("-Solo se permite ingresar valores del 0-8");
         solucion.agregarTexto("-Al valor 0 se lo considera como Espacio/Comodín");
         solucion.agregarTexto("*************************************************");
+
+    }
+
+    private int[][] obtenerConfInicial()
+    {
+        int[][] confInicial = new int[3][3];
+
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                confInicial[i][j] = Integer.parseInt(confInicialArray[i][j].getText());
+            }
+        }
+
+        return confInicial;
+    }
+
+    private int[][] obtenerConfFinal()
+    {
+        int[][] confFinal = new int[3][3];
+
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                confFinal[i][j] = Integer.parseInt(confFinalArray[i][j].getText());
+            }
+        }
+        
+        return confFinal;
     }
 
     private void jCmbMetodosActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jCmbMetodosActionPerformed
@@ -412,9 +494,18 @@ public class InterfazPuzzle extends javax.swing.JFrame
     private void jBtnReiniciarMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_jBtnReiniciarMouseClicked
     {//GEN-HEADEREND:event_jBtnReiniciarMouseClicked
         jTxtSolucion.setText("");
-        
+
         introduccion();
     }//GEN-LAST:event_jBtnReiniciarMouseClicked
+
+    private void jBtnResolverMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_jBtnResolverMouseClicked
+    {//GEN-HEADEREND:event_jBtnResolverMouseClicked
+        int[][] confInicial = obtenerConfInicial();
+        int[][] confFinal = obtenerConfFinal();
+        String profMAx = jTxtProfMax.getText();
+        String cantMaxExplorar = jTxtCantMaxExplorar.getText();
+
+    }//GEN-LAST:event_jBtnResolverMouseClicked
 
     /**
      * @param args the command line arguments
@@ -468,6 +559,7 @@ public class InterfazPuzzle extends javax.swing.JFrame
     private javax.swing.JButton jBtnResolver;
     private javax.swing.JComboBox<String> jCmbMetodos;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPnlBotones;
     private javax.swing.JPanel jPnlCF;
     private javax.swing.JPanel jPnlCI;
@@ -485,7 +577,6 @@ public class InterfazPuzzle extends javax.swing.JFrame
     private javax.swing.JTextField jTxtCF7;
     private javax.swing.JTextField jTxtCF8;
     private javax.swing.JTextField jTxtCF9;
-    private javax.swing.JTextField jTxtCI0;
     private javax.swing.JTextField jTxtCI1;
     private javax.swing.JTextField jTxtCI2;
     private javax.swing.JTextField jTxtCI3;
@@ -494,7 +585,13 @@ public class InterfazPuzzle extends javax.swing.JFrame
     private javax.swing.JTextField jTxtCI6;
     private javax.swing.JTextField jTxtCI7;
     private javax.swing.JTextField jTxtCI8;
+    private javax.swing.JTextField jTxtCI9;
+    private javax.swing.JTextField jTxtCantMaxExplorar;
+    private javax.swing.JTextField jTxtProfMax;
     private javax.swing.JTextArea jTxtSolucion;
     // End of variables declaration//GEN-END:variables
-LogicaResolucion solucion;
+
+    LogicaResolucion solucion;
+    javax.swing.JTextField[][] confInicialArray = new javax.swing.JTextField[3][3];
+    javax.swing.JTextField[][] confFinalArray = new javax.swing.JTextField[3][3];
 }
