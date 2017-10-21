@@ -19,287 +19,148 @@ public class LogicaResolucion {
     public void agregarTexto(String texto){
         jTxtSolucion.append(texto+"\n");
     }
-    public static void main(String[] args) {
-        
-        Scanner sc = new Scanner(System.in);  //crear un objeto Scanner
-        int opcion=0;
-        int [][] ConfInicial= {{1,2,3},{0,5,6},{4,7,8}};//new int[3][3]; //creamos un array bidimensional (3x3), corresponde a la Conf Inicial
-        int [][] ConfFinal={{1,2,3},{4,5,6},{7,8,0}};//new int [3][3]; //creamos un array bidimensional, corresponde a la Conf Final
-        
-        int [][] ConfInicialAnterior= {{1,2,3},{0,5,6},{4,7,8}}; //iniciamos el array con valores predefinidos
-        //luego de que se carguen valores en los anteriores, estos adquirirán dichos valores.
-        int [][] ConfFinalAnterior={{1,2,3},{4,5,6},{7,8,0}};
-        
-        int fila=3, columna=3, profundidad=0, operacion=0, MAXProfundidad=0, MAXNodosExplorados=0 ;
-        double SinLimites=0;
-        Nodo solucion;
-     
-        System.out.println("************************************************");
-        System.out.println("                   PUZZLE IUA                   ");
-        System.out.println("************************************************");
-        System.out.println("La Matriz del Puzzle será la siguiente");
-        System.out.println("       [1er valor][2do valor][3er valor]   ");
-        System.out.println("       [4to valor][5to valor][6to valor]   ");
-        System.out.println("       [7mo valor][8vo valor][9no valor]   ");
-        System.out.println("");
-        System.out.println("Caracterisitcas del Juego:");
-        System.out.println("-Solo se permite ingresar valores del 0-8");
-        System.out.println("-Al valor 0 se lo considera como Espacio/Comodín");
-        System.out.println("*************************************************");
-        System.out.println("------------------------MENU-----------------------");
-        System.out.println("1_ Ingresar valores al Juego, configuracion Inicial y Final(SOLUCION) ");
-        System.out.println("2_ Utilizar la ultima configuracion Inicial y Final usada ");
-        System.out.println("3_ Resolver con Primero en Anchura");
-        System.out.println("4_ Resolver con Primero en Profundidad ");
-        System.out.println("5_ Resolver con Primero el Mejor ");
-        System.out.println("6_ Resolver con A* ");
-        System.out.println("7_ Resolver con Escalada con Máxima Pendiente ");
-        System.out.println("Salir (0)");
-        opcion=sc.nextInt();
-
-        while(opcion!=0){
-            switch (opcion)
-                {
-                case 1:
-                    //ANTES DE INGRESAR NUEVOS VALORES A LA MATRIZ, GUARDAMOS LA CONFIG ANTERIOR.
-                    for (int i = 0; i < fila; i++) {
-                        for (int j = 0; j < columna; j++) {
-                            ConfInicialAnterior[i][j]=ConfInicial[i][j];
-                        }
-                    }
-                    for (int i = 0; i < fila; i++) {
-                        for (int j = 0; j < columna; j++) {
-                            ConfFinalAnterior[i][j]=ConfFinal[i][j];
-                        }
-                    }
-                    ///////////////////////////////////////////////////////////////////////
-                    System.out.println("Ingrese los valores de la Configuracion Inicial:");
-                    for (int i = 0; i < fila; i++) { //recorremos por fila, i=fila.
-                     System.out.println("Fila "+i);
-                        for (int j = 0; j < columna; j++) {// recorremos por columna, j=columna.
-                            System.out.print("valor: ");
-                            ConfInicial [i][j]=sc.nextInt();//asignamos el valor ingresado a dicha fila y columna.
-                             //primero carga todas las columnas de la primer fila y despues pasa a la siguiente fila
-                        }
-                     System.out.println("");
-                    }
-                    System.out.println("Ingrese los valores de la Configuracion Final:");
-                    for (int i = 0; i < fila; i++) {
-                        System.out.println("Fila "+i);
-                            for (int j = 0; j < columna; j++) {
-                              System.out.print("valor: ");
-                              ConfFinal [i][j]=sc.nextInt();                            
-                            }
-                        System.out.println("");
-                    }
-                    System.out.println("Matriz Inicial sera:");
-                    imprimirMatrices(ConfInicial);              
-                    System.out.println("Matriz Final/Solucion sera:");
-                    imprimirMatrices(ConfFinal);               
-                    break;
-                    
-                case 2:
-                    
-                    System.out.println("Los ultimos valores utilizados son:");
-                    System.out.println("Matriz Inicial:");                
-                    for (int i = 0; i < fila; i++) {
-                        for (int j = 0; j < columna; j++) {
-                            System.out.print("["+ConfInicialAnterior[i][j]+"]");
-                            ConfInicial[i][j]=ConfInicialAnterior[i][j];
-                        }
-                        System.out.println("");
-                    }
-                    System.out.println("Matriz Final/Solucion:");                   
-                    for (int i = 0; i < fila; i++) {
-                         for (int j = 0; j < columna; j++) {
-                             System.out.print("["+ConfFinalAnterior[i][j]+"]");
-                             ConfFinal[i][j]=ConfFinalAnterior[i][j];
-                        }
-                        System.out.println("");
-                    }
-                    break;
-                    
-                case 3:
-                    //lo primero que necesitamos hacer para buscar la solucion es convertir el 
-                    //array ConfInicial en un nodo el cual sera el nodo origen (el primero)          
-                    Nodo inicial=new Nodo(ConfInicial); 
-                    
-                    System.out.println("Profundidad MAXIMA: ");
-                    MAXProfundidad=sc.nextInt();
-                    System.out.println("Cantidad MAXIMA de Nodos Explorar: ");
-                    MAXNodosExplorados=sc.nextInt();                       
-                    System.out.println("---------Paso Por Paso----------");
-                    solucion=buscarSolucionAnchura(inicial, ConfFinal,MAXProfundidad,MAXNodosExplorados );
-                        
-                    if(solucion==null)
-                        System.out.println("NO SE ENCONTRO SOLUCION DENTRO DE LOS LIMITES ESTABLECIDOS");
-                        
-                    else
-                        {
-                            System.out.println("--------EL CAMINO A LA SOLUCION ES------------ ");                        
-                            while(solucion.getPadre()!=null)
-                            {
-                                imprimirSolucion(solucion.getEstado());
-                                solucion=solucion.getPadre();                    
-                            }
-                            System.out.println("Nodo inicial:");
-                            for (int i = 0; i < fila; i++) {
-                                for (int j = 0; j < columna; j++) {
-                                    System.out.print("["+ConfInicial[i][j]+"]");
-                                }
-                                System.out.println("");
-                            }
-                        }                                       
-                    break;
-                    
-                case 4:
-                    Nodo inicial2=new Nodo(ConfInicial); 
-                    
-                    System.out.println("Profundidad MAXIMA: ");
-                    MAXProfundidad=sc.nextInt();
-                    System.out.println("Cantidad MAXIMA de Nodos a Explorar: ");
-                    MAXNodosExplorados=sc.nextInt();
-                    System.out.println("---------Paso Por Paso----------");
-                    solucion=buscarSolucionProfundidad(inicial2, ConfFinal,MAXProfundidad,MAXNodosExplorados );                    
-                        
-                    if(solucion==null)
-                        System.out.println("NO SE ENCONTRO SOLUCION DENTRO DE LOS LIMITES ESTABLECIDOS");
-                        
-                    else
-                    {
-                        System.out.println("--------EL CAMINO A LA SOLUCION ES------------ ");                       
-                        while(solucion.getPadre()!=null)
-                        {
-                            imprimirSolucion(solucion.getEstado());
-                            solucion=solucion.getPadre();                    
-                        }
-                        System.out.println("Nodo inicial:");
-                        for (int i = 0; i < fila; i++) {
-                            for (int j = 0; j < columna; j++) {
-                                System.out.print("["+ConfInicial[i][j]+"]");
-                            }
-                            System.out.println("");
-                        }
-                    }                                                                     
-                    break;
-                
-                case 5:
-                    Nodo inicial3=new Nodo(ConfInicial);
-                    
-                    System.out.println("Profundidad MAXIMA: ");
-                    MAXProfundidad=sc.nextInt();
-                    System.out.println("Cantidad MAXIMA de Nodos a Explorar: ");
-                    MAXNodosExplorados=sc.nextInt();
-                    System.out.println("---------Paso Por Paso----------");
-                    solucion=buscarSolucionPrimeroElMejor(inicial3, ConfFinal,MAXProfundidad,MAXNodosExplorados );                    
-                        
-                    if(solucion==null)
-                        System.out.println("NO SE ENCONTRO SOLUCION DENTRO DE LOS LIMITES ESTABLECIDOS");
-                        
-                    else
-                    {
-                        System.out.println("--------EL CAMINO A LA SOLUCION ES------------ ");                        
-                        while(solucion.getPadre()!=null)
-                        {
-                            imprimirSolucion(solucion.getEstado());
-                            solucion=solucion.getPadre();                    
-                        }
-                        System.out.println("Nodo inicial:");
-                        for (int i = 0; i < fila; i++) {
-                            for (int j = 0; j < columna; j++) {
-                                System.out.print("["+ConfInicial[i][j]+"]");
-                            }
-                            System.out.println("");
-                        }
-                    }                                                                                          
-                    break;
-                    
-                case 6:
-                    Nodo inicial4=new Nodo(ConfInicial);
-                    
-                    System.out.println("Profundidad MAXIMA: ");
-                    MAXProfundidad=sc.nextInt();
-                    System.out.println("Cantidad MAXIMA de Nodos a Explorar: ");
-                    MAXNodosExplorados=sc.nextInt();
-                    System.out.println("---------Paso Por Paso----------");
-                    solucion=buscarSolucionAestrella(inicial4, ConfFinal,MAXProfundidad,MAXNodosExplorados );                    
-                        
-                    if(solucion==null)
-                        System.out.println("NO SE ENCONTRO SOLUCION DENTRO DE LOS LIMITES ESTABLECIDOS");
-                        
-                    else
-                    {
-                        System.out.println("--------EL CAMINO A LA SOLUCION ES------------ ");                       
-                        while(solucion.getPadre()!=null)
-                        {
-                            imprimirSolucion(solucion.getEstado());
-                            solucion=solucion.getPadre();                    
-                        }
-                        System.out.println("Nodo inicial:");
-                        for (int i = 0; i < fila; i++) {
-                            for (int j = 0; j < columna; j++) {
-                                System.out.print("["+ConfInicial[i][j]+"]");
-                            }
-                            System.out.println("");
-                        }
-                    }                                               
-                    break;
-                
-                case 7:
-                    Nodo inicial5=new Nodo(ConfInicial);
-                    
-                    System.out.println("Profundidad MAXIMA: ");
-                    MAXProfundidad=sc.nextInt();
-                    System.out.println("Cantidad MAXIMA de Nodos a Explorar: ");
-                    MAXNodosExplorados=sc.nextInt();
-                    System.out.println("---------Paso Por Paso----------");
-                    solucion=buscarSolucionEscaladaMaxPendiente(inicial5, ConfFinal,MAXProfundidad,MAXNodosExplorados );                    
-                        
-                    if(solucion==null)
-                    {   System.out.println("NO SE ENCONTRO SOLUCION");
-                        
-                    }   
-                    else
-                    {
-                        System.out.println("--------EL CAMINO A LA SOLUCION ES------------ ");                       
-                        while(solucion.getPadre()!=null)
-                        {
-                            imprimirSolucion(solucion.getEstado());
-                            solucion=solucion.getPadre();                    
-                        }
-                        System.out.println("Nodo inicial:");
-                        for (int i = 0; i < fila; i++) {
-                            for (int j = 0; j < columna; j++) {
-                                System.out.print("["+ConfInicial[i][j]+"]");
-                            }
-                            System.out.println("");
-                        }
-                    }                
-                    break;
-                    
-                default:
-                    break;
-        }
-           
-        System.out.println("------------------------MENU-----------------------");
-        System.out.println("1_ Ingresar valores al Juego, configuracion Inicial y Final(SOLUCION) ");
-        System.out.println("2_ Utilizar la ultima configuracion Inicial y Final usada ");
-        System.out.println("3_ Resolver con Primero en Anchura");
-        System.out.println("4_ Resolver con Primero en Profundidad ");
-        System.out.println("5_ Resolver con Primero el Mejor ");
-        System.out.println("6_ Resolver con A* ");
-        System.out.println("7_ Resolver con Escalada con Máxima Pendiente ");
-        System.out.println("Salir (0)");
-        opcion=sc.nextInt();    
+    public void agregarTextoMatriz(String texto){
+        jTxtSolucion.append(texto);
     }
+    public void configurar(int[][] confInicial, int[][] confFinal, int profMAx, int cantMaxExplorar) {
+        
+//                case 4:
+//                    Nodo inicial2=new Nodo(ConfInicial); 
+//                    
+//                    System.out.println("Profundidad MAXIMA: ");
+//                    MAXProfundidad=sc.nextInt();
+//                    System.out.println("Cantidad MAXIMA de Nodos a Explorar: ");
+//                    MAXNodosExplorados=sc.nextInt();
+//                    System.out.println("---------Paso Por Paso----------");
+//                    solucion=buscarSolucionProfundidad(inicial2, ConfFinal,MAXProfundidad,MAXNodosExplorados );                    
+//                        
+//                    if(solucion==null)
+//                        System.out.println("NO SE ENCONTRO SOLUCION DENTRO DE LOS LIMITES ESTABLECIDOS");
+//                        
+//                    else
+//                    {
+//                        System.out.println("--------EL CAMINO A LA SOLUCION ES------------ ");                       
+//                        while(solucion.getPadre()!=null)
+//                        {
+//                            imprimirSolucion(solucion.getEstado());
+//                            solucion=solucion.getPadre();                    
+//                        }
+//                        System.out.println("Nodo inicial:");
+//                        for (int i = 0; i < fila; i++) {
+//                            for (int j = 0; j < columna; j++) {
+//                                System.out.print("["+ConfInicial[i][j]+"]");
+//                            }
+//                            System.out.println("");
+//                        }
+//                    }                                                                     
+//                    break;
+//                
+//                case 5:
+//                    Nodo inicial3=new Nodo(ConfInicial);
+//                    
+//                    System.out.println("Profundidad MAXIMA: ");
+//                    MAXProfundidad=sc.nextInt();
+//                    System.out.println("Cantidad MAXIMA de Nodos a Explorar: ");
+//                    MAXNodosExplorados=sc.nextInt();
+//                    System.out.println("---------Paso Por Paso----------");
+//                    solucion=buscarSolucionPrimeroElMejor(inicial3, ConfFinal,MAXProfundidad,MAXNodosExplorados );                    
+//                        
+//                    if(solucion==null)
+//                        System.out.println("NO SE ENCONTRO SOLUCION DENTRO DE LOS LIMITES ESTABLECIDOS");
+//                        
+//                    else
+//                    {
+//                        System.out.println("--------EL CAMINO A LA SOLUCION ES------------ ");                        
+//                        while(solucion.getPadre()!=null)
+//                        {
+//                            imprimirSolucion(solucion.getEstado());
+//                            solucion=solucion.getPadre();                    
+//                        }
+//                        System.out.println("Nodo inicial:");
+//                        for (int i = 0; i < fila; i++) {
+//                            for (int j = 0; j < columna; j++) {
+//                                System.out.print("["+ConfInicial[i][j]+"]");
+//                            }
+//                            System.out.println("");
+//                        }
+//                    }                                                                                          
+//                    break;
+//                    
+//                case 6:
+//                    Nodo inicial4=new Nodo(ConfInicial);
+//                    
+//                    System.out.println("Profundidad MAXIMA: ");
+//                    MAXProfundidad=sc.nextInt();
+//                    System.out.println("Cantidad MAXIMA de Nodos a Explorar: ");
+//                    MAXNodosExplorados=sc.nextInt();
+//                    System.out.println("---------Paso Por Paso----------");
+//                    solucion=buscarSolucionAestrella(inicial4, ConfFinal,MAXProfundidad,MAXNodosExplorados );                    
+//                        
+//                    if(solucion==null)
+//                        System.out.println("NO SE ENCONTRO SOLUCION DENTRO DE LOS LIMITES ESTABLECIDOS");
+//                        
+//                    else
+//                    {
+//                        System.out.println("--------EL CAMINO A LA SOLUCION ES------------ ");                       
+//                        while(solucion.getPadre()!=null)
+//                        {
+//                            imprimirSolucion(solucion.getEstado());
+//                            solucion=solucion.getPadre();                    
+//                        }
+//                        System.out.println("Nodo inicial:");
+//                        for (int i = 0; i < fila; i++) {
+//                            for (int j = 0; j < columna; j++) {
+//                                System.out.print("["+ConfInicial[i][j]+"]");
+//                            }
+//                            System.out.println("");
+//                        }
+//                    }                                               
+//                    break;
+//                
+//                case 7:
+//                    Nodo inicial5=new Nodo(ConfInicial);
+//                    
+//                    System.out.println("Profundidad MAXIMA: ");
+//                    MAXProfundidad=sc.nextInt();
+//                    System.out.println("Cantidad MAXIMA de Nodos a Explorar: ");
+//                    MAXNodosExplorados=sc.nextInt();
+//                    System.out.println("---------Paso Por Paso----------");
+//                    solucion=buscarSolucionEscaladaMaxPendiente(inicial5, ConfFinal,MAXProfundidad,MAXNodosExplorados );                    
+//                        
+//                    if(solucion==null)
+//                    {   System.out.println("NO SE ENCONTRO SOLUCION");
+//                        
+//                    }   
+//                    else
+//                    {
+//                        System.out.println("--------EL CAMINO A LA SOLUCION ES------------ ");                       
+//                        while(solucion.getPadre()!=null)
+//                        {
+//                            imprimirSolucion(solucion.getEstado());
+//                            solucion=solucion.getPadre();                    
+//                        }
+//                        System.out.println("Nodo inicial:");
+//                        for (int i = 0; i < fila; i++) {
+//                            for (int j = 0; j < columna; j++) {
+//                                System.out.print("["+ConfInicial[i][j]+"]");
+//                            }
+//                            System.out.println("");
+//                        }
+//                    }                
+//                    break;
+//                    
+//                default:
+//                    break;
+//        }
+//       
             
    }
     // es un metodo static porque nos permite instanciar SIN crear un objeto de la clase
-    public static Nodo buscarSolucionAnchura(Nodo inicial, int[][] ConfFinal,int MAXProfundidad, int MAXNodosExplorados){
+    public Nodo buscarSolucionAnchura(Nodo inicial, int[][] ConfFinal,int MAXProfundidad, int MAXNodosExplorados){
     // el metodo va a necesitar que le pasemos un Nodo inicial y un array bidirecc. con la solucion
-        ArrayList <Nodo> listaAbierta=new ArrayList<Nodo>();//guarda todos los nodos que se van a
+        ArrayList <Nodo> listaAbierta=new ArrayList<>();//guarda todos los nodos que se van a
         //ir explorando/expandiendo, y el primer nodo que tiene que ser explorado es el Nodo inicial       
-        ArrayList<Nodo> listaCerrada= new ArrayList<Nodo>(); 
+        ArrayList<Nodo> listaCerrada= new ArrayList<>(); 
         int profundidad=0;//el nodo inicial se encuentra en la profundidad 0  
         inicial.setProfundidad(profundidad);
         listaAbierta.add(inicial);
@@ -323,14 +184,14 @@ public class LogicaResolucion {
             
             
             if(Arrays.deepEquals(revisar.getEstado(), ConfFinal)){//condicion de parada si el nodo que estamos revisando es igual a la solucion parar
-                System.out.println("******* SOLUCION ENCONTRADA*********");
-                System.out.println("Informacion:");
-                System.out.println("> Cantidad de nodos Evaluados= "+listaCerrada.size());
+                agregarTexto("******* SOLUCION ENCONTRADA*********");
+                agregarTexto("Informacion:");
+                agregarTexto("> Cantidad de nodos Evaluados= "+listaCerrada.size());
                 profundidad=calcularProfundidad(revisar);
-                System.out.println("> Profundidad alcanzada: "+profundidad);
+                agregarTexto("> Profundidad alcanzada: "+profundidad);
                 ramificacionMedio=(double)cantidadDeNodosExplorados/(double)calcularProfundidad(revisar);
-                System.out.println("> Ramificacion Medio= "+ramificacionMedio);            
-                System.out.println("> Perfil de Ramificacion: ");               
+                agregarTexto("> Ramificacion Medio= "+ramificacionMedio);            
+                agregarTexto("> Perfil de Ramificacion: ");               
                 imprimirPerfilRamificacion(profundidad,listaCerrada );
                 return revisar;//retorna el ultimo nodo explorado        
             }
@@ -409,7 +270,7 @@ public class LogicaResolucion {
         return null;
     }
     
-    public static void imprimirEstadoNodoRevisado(Nodo revisar, int[][] revis, int cantNodosRev)
+    public void imprimirEstadoNodoRevisado(Nodo revisar, int[][] revis, int cantNodosRev)
     {
         int prof=0;
          while(revisar.getPadre()!=null)
@@ -417,14 +278,14 @@ public class LogicaResolucion {
                          revisar=revisar.getPadre();
                          prof++;  
                      }
-        System.out.println("Siguiente Movimiento en la profundidad= "+prof);//nodo revisado
-        System.out.println("Cantidad de nodos explorados= "+cantNodosRev);
+        agregarTexto("Siguiente Movimiento en la profundidad= "+prof);//nodo revisado
+        agregarTexto("Cantidad de nodos explorados= "+cantNodosRev);
         
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                System.out.print("["+revis[i][j]+"]");
+                agregarTextoMatriz("["+revis[i][j]+"]");
             }
-            System.out.println("");
+            agregarTexto("");
         }
         
     }
@@ -463,7 +324,7 @@ public class LogicaResolucion {
         return false;//por defecto retorna false (el nodo hijo no fue yarevisado anteriormente        
     }
    
-    public static Nodo buscarSolucionProfundidad(Nodo inicial2, int[][] ConfFinal,int MAXProfundidad,int MAXNodosExplorados) {
+    public Nodo buscarSolucionProfundidad(Nodo inicial2, int[][] ConfFinal,int MAXProfundidad,int MAXNodosExplorados) {
         
         ArrayList <Nodo> listaAbierta=new ArrayList<Nodo>();
         ArrayList<Nodo> listaCerrada= new ArrayList<Nodo>();
@@ -566,7 +427,7 @@ public class LogicaResolucion {
         return null;
     }
 
-    public static Nodo buscarSolucionPrimeroElMejor(Nodo inicial3, int[][] ConfFinal,int MAXProfundidad,int MAXNodosExplorados) {
+    public Nodo buscarSolucionPrimeroElMejor(Nodo inicial3, int[][] ConfFinal,int MAXProfundidad,int MAXNodosExplorados) {
          
         ArrayList <Nodo> listaAbierta=new ArrayList<Nodo>();
         ArrayList<Nodo> listaCerrada= new ArrayList<Nodo>();
@@ -693,35 +554,35 @@ public class LogicaResolucion {
         return c;
     }
 
-    public static void imprimirEstadoNodoPMejorCostos(int[][] estado, int costoTotal, Nodo rev, int cantidadExplorados) {
+    public void imprimirEstadoNodoPMejorCostos(int[][] estado, int costoTotal, Nodo rev, int cantidadExplorados) {
         int prof=0;
          while(rev.getPadre()!=null)
                      {                         
                          rev=rev.getPadre();
                          prof++;  
                      }
-        System.out.println("Siguiente Movimiento en la profundidad= "+prof+", costo= "+costoTotal);
-        System.out.println("Cantidad de nodos explorados= "+cantidadExplorados);
+        agregarTexto("Siguiente Movimiento en la profundidad= "+prof+", costo= "+costoTotal);
+        agregarTexto("Cantidad de nodos explorados= "+cantidadExplorados);
      
         for (int i = 0; i < estado.length; i++) {
             for (int j = 0; j < estado.length; j++) {
-                System.out.print("["+estado[i][j]+"]");
+                agregarTextoMatriz("["+estado[i][j]+"]");
             }
-            System.out.println("");
+            agregarTexto("");
         }
     }
 
-    public static void imprimirSolucion(int [][] sol) {
-       System.out.println("Proximo  ");
+    public void imprimirSolucion(int [][] sol) {
+       agregarTexto("Proximo  ");
         for (int i = 0; i < sol.length; i++) {
             for (int j = 0; j<sol.length; j++) {
-                System.out.print("["+sol[i][j]+"]");
+                agregarTextoMatriz("["+sol[i][j]+"]");
             }
-            System.out.println("");
+            agregarTexto("");
         }
     }
 
-    public static Nodo buscarSolucionAestrella(Nodo inicial4, int[][] ConfFinal,int MAXProfundidad,int MAXNodosExplorados) {
+    public Nodo buscarSolucionAestrella(Nodo inicial4, int[][] ConfFinal,int MAXProfundidad,int MAXNodosExplorados) {
          
         ArrayList <Nodo> listaAbierta=new ArrayList<Nodo>();
         ArrayList<Nodo> listaCerrada= new ArrayList<Nodo>();
@@ -846,16 +707,16 @@ public class LogicaResolucion {
         return null;
     }
 
-    public static void imprimirEstadoNodoAestrellaCostos(int[][] estado, int costo, Integer prof, Integer costoTotal, int cantidadExplorados) {
+    public void imprimirEstadoNodoAestrellaCostos(int[][] estado, int costo, Integer prof, Integer costoTotal, int cantidadExplorados) {
         
-        System.out.println("Siguiente Movimiento");
-        System.out.println("Costo= "+costo+",Profundidad= "+prof+",Costo Total= "+costoTotal);
-        System.out.println("Cantidad nodos explorados= "+cantidadExplorados);
+        agregarTexto("Siguiente Movimiento");
+        agregarTexto("Costo= "+costo+",Profundidad= "+prof+",Costo Total= "+costoTotal);
+        agregarTexto("Cantidad nodos explorados= "+cantidadExplorados);
         for (int i = 0; i < estado.length; i++) {
             for (int j = 0; j < estado.length; j++) {
-                System.out.print("["+estado[i][j]+"]");
+                agregarTextoMatriz("["+estado[i][j]+"]");
             }
-            System.out.println("");
+            agregarTexto("");
         }
         
     }
@@ -870,18 +731,18 @@ public class LogicaResolucion {
          return prof;
     }
 
-    public static void imprimirMatrices(int[][] ConfActual) {
+    public void imprimirMatrices(int[][] ConfActual) {
         int valor=0;
         for (int i = 0; i < ConfActual.length; i++) {
             for (int j = 0; j < ConfActual.length; j++) {
                 valor=ConfActual [i][j];
-                System.out.print("["+valor+"]");               
+                agregarTextoMatriz("["+valor+"]");               
             }
-        System.out.println("");
+        agregarTexto("");
         }
     }
 
-    public static void imprimirPerfilRamificacion(int profundidad, ArrayList<Nodo> listaCerrada) {
+    public void imprimirPerfilRamificacion(int profundidad, ArrayList<Nodo> listaCerrada) {
         int prof=0;
         int cantNodosEnNivelDeProf;       
         for (int i = 0; i <=profundidad; i++)        
@@ -896,124 +757,11 @@ public class LogicaResolucion {
                        cantNodosEnNivelDeProf++; 
                 }
             }
-            System.out.println("    Cantidad de nodos en el nivel: "+i+" es de: "+cantNodosEnNivelDeProf);
+            agregarTexto("    Cantidad de nodos en el nivel: "+i+" es de: "+cantNodosEnNivelDeProf);
         }
     }
 
-    public static Nodo buscarSolucionEscaladaMaxPendiente(Nodo inicial5, int[][] ConfFinal, int MAXProfundidad, int MAXNodosExplorados) {
-     
-        ArrayList <Nodo> listaAbierta=new ArrayList<Nodo>();
-        ArrayList<Nodo> listaCerrada= new ArrayList<Nodo>();
-        listaAbierta.add(inicial5);
-        int cantidadDeNodosExplorados=0;
-        int profundidad=0;
-        int cantidadElementosBien=0;// cantidad de piezas bien colocadas
-        double ramificacionMedio=0;
-        Nodo revisar=listaAbierta.remove(0);
-        cantidadElementosBien=calcularCantElemBien(revisar.getEstado(), ConfFinal);
-        revisar.setCostoTotal(cantidadElementosBien);
-        
-       while(cantidadDeNodosExplorados<MAXNodosExplorados&&profundidad<=MAXProfundidad)
-        {        
-            cantidadDeNodosExplorados++;
-            imprimirEstadoNodoEscMaxPend(revisar.getEstado(),revisar.getCostoTotal(),revisar,cantidadDeNodosExplorados);
-            int [] posicionDelCero=ubicarPosicionCero(revisar.getEstado());           
-            
-            listaCerrada.add(revisar); 
-            ArrayList<Nodo> hijos=new ArrayList<Nodo>();
-            
-            if(Arrays.deepEquals(revisar.getEstado(), ConfFinal)){ 
-                System.out.println("******* SOLUCION ENCONTRADA*********");
-                System.out.println("Informacion:");
-                System.out.println("> Cantidad de nodos Evaluados= "+listaCerrada.size()); 
-                profundidad=calcularProfundidad(revisar);
-                System.out.println("> Profundidad alcanzada: "+profundidad);                
-                ramificacionMedio=(double)cantidadDeNodosExplorados/(double)calcularProfundidad(revisar);
-                System.out.println("> Ramificacion Medio= "+ramificacionMedio);            
-                System.out.println("> Perfil de Ramificacion: ");               
-                imprimirPerfilRamificacion(profundidad,listaCerrada );                
-                return revisar;
-            }           
-             if(posicionDelCero[0]!=0)             
-            {
-                Nodo hijo=new Nodo(clonar(revisar.getEstado())); 
-                int arriba=hijo.getEstado()[posicionDelCero[0]-1][posicionDelCero[1]];
-                hijo.getEstado()[posicionDelCero[0]][posicionDelCero[1]]=arriba; 
-                hijo.getEstado()[posicionDelCero[0]-1][posicionDelCero[1]]=0; 
-                              
-                hijo.setPadre(revisar);
-                profundidad=calcularProfundidad(hijo);
-                hijo.setProfundidad(profundidad);
-                cantidadElementosBien=calcularCantElemBien(hijo.getEstado(), ConfFinal);                   
-                hijo.setCostoTotal(cantidadElementosBien);
-                listaAbierta.add(hijo);
-                hijos.add(hijo);
-            }
-            if(posicionDelCero[0]!=2)                       
-            {
-                Nodo hijo=new Nodo(clonar(revisar.getEstado()));
-                int abajo=hijo.getEstado()[posicionDelCero[0]+1][posicionDelCero[1]];//capturamos el valor que esta en la fila de abajo del cero
-                hijo.getEstado()[posicionDelCero[0]][posicionDelCero[1]]=abajo;
-                hijo.getEstado()[posicionDelCero[0]+1][posicionDelCero[1]]=0;
-                 
-                hijo.setPadre(revisar);
-                profundidad=calcularProfundidad(hijo);
-                hijo.setProfundidad(profundidad);                   
-                cantidadElementosBien=calcularCantElemBien(hijo.getEstado(), ConfFinal);                   
-                hijo.setCostoTotal(cantidadElementosBien);
-                listaAbierta.add(hijo);                           
-                hijos.add(hijo);
-            }
-              
-            if(posicionDelCero[1]!=0)                       
-            {
-                Nodo hijo=new Nodo(clonar(revisar.getEstado()));//le estamos pasando un nodo igual al de antes pero ahora lo modificamos com los movimientos
-                int izquierda=hijo.getEstado()[posicionDelCero[0]][posicionDelCero[1]-1];//capturamos el valor que esta en la fila de arriba de esa columna en la variable arriba
-                hijo.getEstado()[posicionDelCero[0]][posicionDelCero[1]]=izquierda;//metemos en la posicion donde estaba el cero, el valor que estaba en la fila de arriba
-                hijo.getEstado()[posicionDelCero[0]][posicionDelCero[1]-1]=0;//metemos en la fila de arriba el cero
-                 
-                hijo.setPadre(revisar);
-                profundidad=calcularProfundidad(hijo);
-                hijo.setProfundidad(profundidad);                   
-                cantidadElementosBien=calcularCantElemBien(hijo.getEstado(), ConfFinal);                   
-                hijo.setCostoTotal(cantidadElementosBien);
-                listaAbierta.add(hijo);                         
-                hijos.add(hijo);
-            }
-            
-            if(posicionDelCero[1]!=2)                  
-            {
-                Nodo hijo=new Nodo(clonar(revisar.getEstado()));
-                int derecha=hijo.getEstado()[posicionDelCero[0]][posicionDelCero[1]+1];//capturamos el valor que esta en la fila de abajo del cero
-                hijo.getEstado()[posicionDelCero[0]][posicionDelCero[1]]=derecha;
-                hijo.getEstado()[posicionDelCero[0]][posicionDelCero[1]+1]=0;
-                
-                hijo.setPadre(revisar);
-                profundidad=calcularProfundidad(hijo);
-                hijo.setProfundidad(profundidad);                   
-                cantidadElementosBien=calcularCantElemBien(hijo.getEstado(), ConfFinal);                   
-                hijo.setCostoTotal(cantidadElementosBien);
-                listaAbierta.add(hijo);                
-                hijos.add(hijo);
-            }
-           revisar.setHijos(hijos);
-           
-           Collections.sort(listaAbierta, Collections.reverseOrder());//Ordena el ArrayList de modo Ascendente
-           Nodo mejorHijo=listaAbierta.remove(0);
-            if (mejorHijo.getCostoTotal()<revisar.getCostoTotal()) {
-                System.out.println("No existe un nodo mejor que el actual");
-                break;
-            }
-           revisar=mejorHijo;
-           profundidad=calcularProfundidad(revisar);
-           listaAbierta.clear();//borro los hijos del nodo anterior
-        }
-        
-        
-     return null;    
-    }
-
-    public static int calcularCantElemBien(int[][] estado, int[][] ConfFinal) {
+    public int calcularCantElemBien(int[][] estado, int[][] ConfFinal) {
         
        int c=0;
         for (int i = 0; i < ConfFinal.length; i++) {
@@ -1025,27 +773,6 @@ public class LogicaResolucion {
         return c; 
     }
 
-    public static void imprimirEstadoNodoEscMaxPend(int[][] estado, Integer costoTotal, Nodo revisar, int cantidadDeNodosExplorados) {
-         
-        int prof=0;
-         while(revisar.getPadre()!=null)
-                     {                         
-                         revisar=revisar.getPadre();
-                         prof++;  
-                     }
-        System.out.println("Siguiente Movimiento en la profundidad= "+prof+", piezas bien colocadas= "+costoTotal);
-        System.out.println("Cantidad de nodos explorados= "+cantidadDeNodosExplorados);
-     
-        for (int i = 0; i < estado.length; i++) {
-            for (int j = 0; j < estado.length; j++) {
-                System.out.print("["+estado[i][j]+"]");
-            }
-            System.out.println("");
-        }
-        
-    }
-
-    
-   
+      
   
 }

@@ -6,6 +6,7 @@
 package interfaz;
 
 import logica.LogicaResolucion;
+import soporte.Nodo;
 
 /**
  *
@@ -464,31 +465,13 @@ public class InterfazPuzzle extends javax.swing.JFrame
                 confFinal[i][j] = Integer.parseInt(confFinalArray[i][j].getText());
             }
         }
-        
+
         return confFinal;
     }
 
     private void jCmbMetodosActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jCmbMetodosActionPerformed
     {//GEN-HEADEREND:event_jCmbMetodosActionPerformed
-        int i = jCmbMetodos.getSelectedIndex();
 
-        switch (i)
-        {
-            case 0:
-                solucion.agregarTexto("Primero en Anchura");
-                break;
-
-            case 1:
-                solucion.agregarTexto("Primero en Profundidad");
-                break;
-            case 2:
-                solucion.agregarTexto("Primero el Mejor");
-                break;
-            case 3:
-                solucion.agregarTexto("A*");
-                break;
-
-        }
     }//GEN-LAST:event_jCmbMetodosActionPerformed
 
     private void jBtnReiniciarMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_jBtnReiniciarMouseClicked
@@ -502,8 +485,61 @@ public class InterfazPuzzle extends javax.swing.JFrame
     {//GEN-HEADEREND:event_jBtnResolverMouseClicked
         int[][] confInicial = obtenerConfInicial();
         int[][] confFinal = obtenerConfFinal();
-        String profMAx = jTxtProfMax.getText();
-        String cantMaxExplorar = jTxtCantMaxExplorar.getText();
+        int profMAx = Integer.parseInt(jTxtProfMax.getText());
+        int cantMaxExplorar = Integer.parseInt(jTxtCantMaxExplorar.getText());
+        int fila = 3, columna = 3, profundidad = 0;
+        double SinLimites=0;
+        solucion.configurar(confInicial, confFinal, profMAx, cantMaxExplorar);
+
+        Nodo nodoRaiz;
+        Nodo resultado;
+
+        int index = jCmbMetodos.getSelectedIndex();
+
+        switch (index)
+        {
+            case 0:
+                //lo primero que necesitamos hacer para buscar la solucion es convertir el 
+                //array ConfInicial en un nodo el cual sera el nodo origen (el primero)      
+                nodoRaiz = new Nodo(confInicial);
+                solucion.agregarTexto("---------Paso Por Paso----------");
+                resultado = solucion.buscarSolucionAnchura(nodoRaiz, confFinal, profMAx, cantMaxExplorar);
+                if (resultado == null)
+                {
+                    solucion.agregarTexto("NO SE ENCONTRO SOLUCION DENTRO DE LOS LIMITES ESTABLECIDOS");
+                } else
+                {
+                    solucion.agregarTexto("--------EL CAMINO A LA SOLUCION ES------------ ");
+                    while (resultado.getPadre() != null)
+                    {
+                        solucion.imprimirSolucion(resultado.getEstado());
+                        resultado = resultado.getPadre();
+                    }
+                    solucion.agregarTexto("Nodo inicial:");
+                    for (int i = 0; i < fila; i++)
+                    {
+                        for (int j = 0; j < columna; j++)
+                        {
+                            solucion.agregarTextoMatriz("[" + confInicial[i][j] + "]");
+                        }
+                        solucion.agregarTexto("");
+                    }
+                }
+//                solucion.agregarTexto("Primero en Anchura");
+                break;
+
+            case 1:
+                solucion.agregarTexto("Primero en Profundidad");
+                break;
+            case 2:
+                solucion.agregarTexto("Primero el Mejor");
+                break;
+            case 3:
+                solucion.agregarTexto("A*");
+                break;
+
+        }
+
 
     }//GEN-LAST:event_jBtnResolverMouseClicked
 
