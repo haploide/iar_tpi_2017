@@ -5,6 +5,7 @@
  */
 package interfaz;
 
+import java.awt.Font;
 import logica.LogicaResolucion;
 import soporte.Nodo;
 
@@ -82,6 +83,7 @@ public class InterfazPuzzle extends javax.swing.JFrame
         jTxtSolucion.setColumns(20);
         jTxtSolucion.setRows(5);
         jScrollPane1.setViewportView(jTxtSolucion);
+        jTxtSolucion.setFont(fuente);
 
         javax.swing.GroupLayout jPnlSolucionLayout = new javax.swing.GroupLayout(jPnlSolucion);
         jPnlSolucion.setLayout(jPnlSolucionLayout);
@@ -488,7 +490,7 @@ public class InterfazPuzzle extends javax.swing.JFrame
         int profMAx = Integer.parseInt(jTxtProfMax.getText());
         int cantMaxExplorar = Integer.parseInt(jTxtCantMaxExplorar.getText());
         int fila = 3, columna = 3, profundidad = 0;
-        double SinLimites=0;
+        double SinLimites = 0;
         solucion.configurar(confInicial, confFinal, profMAx, cantMaxExplorar);
 
         Nodo nodoRaiz;
@@ -529,13 +531,86 @@ public class InterfazPuzzle extends javax.swing.JFrame
                 break;
 
             case 1:
-                solucion.agregarTexto("Primero en Profundidad");
+                nodoRaiz = new Nodo(confInicial);
+                solucion.agregarTexto("---------Paso Por Paso----------");
+                resultado = solucion.buscarSolucionProfundidad(nodoRaiz, confFinal, profMAx, cantMaxExplorar);
+                if (resultado == null)
+                {
+                    solucion.agregarTexto("NO SE ENCONTRO SOLUCION DENTRO DE LOS LIMITES ESTABLECIDOS");
+                } else
+                {
+                    solucion.agregarTexto("--------EL CAMINO A LA SOLUCION ES------------ ");
+                    while (resultado.getPadre() != null)
+                    {
+                        solucion.imprimirSolucion(resultado.getEstado());
+                        resultado = resultado.getPadre();
+                    }
+                    solucion.agregarTexto("Nodo inicial:");
+                    for (int i = 0; i < fila; i++)
+                    {
+                        for (int j = 0; j < columna; j++)
+                        {
+                            solucion.agregarTextoMatriz("[" + confInicial[i][j] + "]");
+                        }
+                        solucion.agregarTexto("");
+                    }
+                }
+//                solucion.agregarTexto("Primero en Profundidad");
                 break;
             case 2:
-                solucion.agregarTexto("Primero el Mejor");
+                nodoRaiz = new Nodo(confInicial);
+                solucion.agregarTexto("---------Paso Por Paso----------");
+                resultado = solucion.buscarSolucionPrimeroElMejor(nodoRaiz, confFinal, profMAx, cantMaxExplorar);
+
+                if (resultado == null)
+                {
+                    solucion.agregarTexto("NO SE ENCONTRO SOLUCION DENTRO DE LOS LIMITES ESTABLECIDOS");
+                } else
+                {
+                    solucion.agregarTexto("--------EL CAMINO A LA SOLUCION ES------------ ");
+                    while (resultado.getPadre() != null)
+                    {
+                        solucion.imprimirSolucion(resultado.getEstado());
+                        resultado = resultado.getPadre();
+                    }
+                    solucion.agregarTexto("Nodo inicial:");
+                    for (int i = 0; i < fila; i++)
+                    {
+                        for (int j = 0; j < columna; j++)
+                        {
+                            solucion.agregarTextoMatriz("[" + confInicial[i][j] + "]");
+                        }
+                        solucion.agregarTexto("");
+                    }
+                }
+//                solucion.agregarTexto("Primero el Mejor");
                 break;
             case 3:
-                solucion.agregarTexto("A*");
+                nodoRaiz = new Nodo(confInicial);
+                solucion.agregarTexto("---------Paso Por Paso----------");
+                resultado = solucion.buscarSolucionAestrella(nodoRaiz, confFinal, profMAx, cantMaxExplorar);
+                if (resultado == null)
+                {
+                    solucion.agregarTexto("NO SE ENCONTRO SOLUCION DENTRO DE LOS LIMITES ESTABLECIDOS");
+                } else
+                {
+                    solucion.agregarTexto("--------EL CAMINO A LA SOLUCION ES------------ ");
+                    while (resultado.getPadre() != null)
+                    {
+                        solucion.imprimirSolucion(resultado.getEstado());
+                        resultado = resultado.getPadre();
+                    }
+                    solucion.agregarTexto("Nodo inicial:");
+                    for (int i = 0; i < fila; i++)
+                    {
+                        for (int j = 0; j < columna; j++)
+                        {
+                            solucion.agregarTextoMatriz("[" + confInicial[i][j] + "]");
+                        }
+                        solucion.agregarTexto("");
+                    }
+                }
+//                solucion.agregarTexto("A*");
                 break;
 
         }
@@ -630,4 +705,5 @@ public class InterfazPuzzle extends javax.swing.JFrame
     LogicaResolucion solucion;
     javax.swing.JTextField[][] confInicialArray = new javax.swing.JTextField[3][3];
     javax.swing.JTextField[][] confFinalArray = new javax.swing.JTextField[3][3];
+    private java.awt.Font fuente = new Font("SansSerif", java.awt.Font.BOLD, 20);
 }

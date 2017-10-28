@@ -91,6 +91,9 @@
                 <Property name="columns" type="int" value="20"/>
                 <Property name="rows" type="int" value="5"/>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="jTxtSolucion.setFont(fuente);"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>

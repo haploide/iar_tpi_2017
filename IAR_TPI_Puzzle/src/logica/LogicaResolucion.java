@@ -1,6 +1,5 @@
 
 package logica;
-import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,97 +23,10 @@ public class LogicaResolucion {
     }
     public void configurar(int[][] confInicial, int[][] confFinal, int profMAx, int cantMaxExplorar) {
         
-//                case 4:
-//                    Nodo inicial2=new Nodo(ConfInicial); 
-//                    
-//                    System.out.println("Profundidad MAXIMA: ");
-//                    MAXProfundidad=sc.nextInt();
-//                    System.out.println("Cantidad MAXIMA de Nodos a Explorar: ");
-//                    MAXNodosExplorados=sc.nextInt();
-//                    System.out.println("---------Paso Por Paso----------");
-//                    solucion=buscarSolucionProfundidad(inicial2, ConfFinal,MAXProfundidad,MAXNodosExplorados );                    
+
+//                                        
 //                        
-//                    if(solucion==null)
-//                        System.out.println("NO SE ENCONTRO SOLUCION DENTRO DE LOS LIMITES ESTABLECIDOS");
-//                        
-//                    else
-//                    {
-//                        System.out.println("--------EL CAMINO A LA SOLUCION ES------------ ");                       
-//                        while(solucion.getPadre()!=null)
-//                        {
-//                            imprimirSolucion(solucion.getEstado());
-//                            solucion=solucion.getPadre();                    
-//                        }
-//                        System.out.println("Nodo inicial:");
-//                        for (int i = 0; i < fila; i++) {
-//                            for (int j = 0; j < columna; j++) {
-//                                System.out.print("["+ConfInicial[i][j]+"]");
-//                            }
-//                            System.out.println("");
-//                        }
-//                    }                                                                     
-//                    break;
-//                
-//                case 5:
-//                    Nodo inicial3=new Nodo(ConfInicial);
-//                    
-//                    System.out.println("Profundidad MAXIMA: ");
-//                    MAXProfundidad=sc.nextInt();
-//                    System.out.println("Cantidad MAXIMA de Nodos a Explorar: ");
-//                    MAXNodosExplorados=sc.nextInt();
-//                    System.out.println("---------Paso Por Paso----------");
-//                    solucion=buscarSolucionPrimeroElMejor(inicial3, ConfFinal,MAXProfundidad,MAXNodosExplorados );                    
-//                        
-//                    if(solucion==null)
-//                        System.out.println("NO SE ENCONTRO SOLUCION DENTRO DE LOS LIMITES ESTABLECIDOS");
-//                        
-//                    else
-//                    {
-//                        System.out.println("--------EL CAMINO A LA SOLUCION ES------------ ");                        
-//                        while(solucion.getPadre()!=null)
-//                        {
-//                            imprimirSolucion(solucion.getEstado());
-//                            solucion=solucion.getPadre();                    
-//                        }
-//                        System.out.println("Nodo inicial:");
-//                        for (int i = 0; i < fila; i++) {
-//                            for (int j = 0; j < columna; j++) {
-//                                System.out.print("["+ConfInicial[i][j]+"]");
-//                            }
-//                            System.out.println("");
-//                        }
-//                    }                                                                                          
-//                    break;
-//                    
-//                case 6:
-//                    Nodo inicial4=new Nodo(ConfInicial);
-//                    
-//                    System.out.println("Profundidad MAXIMA: ");
-//                    MAXProfundidad=sc.nextInt();
-//                    System.out.println("Cantidad MAXIMA de Nodos a Explorar: ");
-//                    MAXNodosExplorados=sc.nextInt();
-//                    System.out.println("---------Paso Por Paso----------");
-//                    solucion=buscarSolucionAestrella(inicial4, ConfFinal,MAXProfundidad,MAXNodosExplorados );                    
-//                        
-//                    if(solucion==null)
-//                        System.out.println("NO SE ENCONTRO SOLUCION DENTRO DE LOS LIMITES ESTABLECIDOS");
-//                        
-//                    else
-//                    {
-//                        System.out.println("--------EL CAMINO A LA SOLUCION ES------------ ");                       
-//                        while(solucion.getPadre()!=null)
-//                        {
-//                            imprimirSolucion(solucion.getEstado());
-//                            solucion=solucion.getPadre();                    
-//                        }
-//                        System.out.println("Nodo inicial:");
-//                        for (int i = 0; i < fila; i++) {
-//                            for (int j = 0; j < columna; j++) {
-//                                System.out.print("["+ConfInicial[i][j]+"]");
-//                            }
-//                            System.out.println("");
-//                        }
-//                    }                                               
+                
 //                    break;
 //                
 //                case 7:
@@ -344,14 +256,14 @@ public class LogicaResolucion {
             ArrayList<Nodo> hijos=new ArrayList<Nodo>();
             
             if(Arrays.deepEquals(revisar.getEstado(), ConfFinal)){ 
-                System.out.println("******* SOLUCION ENCONTRADA*********");
-                System.out.println("Informacion:");
-                System.out.println("> Cantidad de nodos Evaluados= "+listaCerrada.size()); 
+                agregarTexto("******* SOLUCION ENCONTRADA*********");
+                agregarTexto("Informacion:");
+                agregarTexto("> Cantidad de nodos Evaluados= "+listaCerrada.size()); 
                 profundidad=calcularProfundidad(revisar);
-                System.out.println("> Profundidad alcanzada: "+profundidad);
+                agregarTexto("> Profundidad alcanzada: "+profundidad);
                 ramificacionMedio=(double)cantidadDeNodosExplorados/(double)calcularProfundidad(revisar);
-                System.out.println("> Ramificacion Medio= "+ramificacionMedio);            
-                System.out.println("> Perfil de Ramificacion: ");               
+                agregarTexto("> Ramificacion Medio= "+ramificacionMedio);            
+                agregarTexto("> Perfil de Ramificacion: ");               
                 imprimirPerfilRamificacion(profundidad,listaCerrada );
                 return revisar;
             }
@@ -451,14 +363,14 @@ public class LogicaResolucion {
             ArrayList<Nodo> hijos=new ArrayList<Nodo>();
             
             if(Arrays.deepEquals(revisar.getEstado(), ConfFinal)){ 
-                System.out.println("******* SOLUCION ENCONTRADA*********");
-                System.out.println("Informacion:");
-                System.out.println("> Cantidad de nodos Evaluados= "+listaCerrada.size()); 
+                agregarTexto("******* SOLUCION ENCONTRADA*********");
+                agregarTexto("Informacion:");
+                agregarTexto("> Cantidad de nodos Evaluados= "+listaCerrada.size()); 
                 profundidad=calcularProfundidad(revisar);
-                System.out.println("> Profundidad alcanzada: "+profundidad);                
+                agregarTexto("> Profundidad alcanzada: "+profundidad);                
                 ramificacionMedio=(double)cantidadDeNodosExplorados/(double)calcularProfundidad(revisar);
-                System.out.println("> Ramificacion Medio= "+ramificacionMedio);            
-                System.out.println("> Perfil de Ramificacion: ");               
+                agregarTexto("> Ramificacion Medio= "+ramificacionMedio);            
+                agregarTexto("> Perfil de Ramificacion: ");               
                 imprimirPerfilRamificacion(profundidad,listaCerrada );              
                 return revisar;
             }           
@@ -611,14 +523,14 @@ public class LogicaResolucion {
             ArrayList<Nodo> hijos=new ArrayList<Nodo>();
             
             if(Arrays.deepEquals(revisar.getEstado(), ConfFinal)){ 
-                System.out.println("******* SOLUCION ENCONTRADA*********");
-                System.out.println("Informacion:");
-                System.out.println("> Cantidad de nodos Evaluados= "+listaCerrada.size()); 
+                agregarTexto("******* SOLUCION ENCONTRADA*********");
+                agregarTexto("Informacion:");
+                agregarTexto("> Cantidad de nodos Evaluados= "+listaCerrada.size()); 
                 profundidad=calcularProfundidad(revisar);
-                System.out.println("> Profundidad alcanzada: "+profundidad);
+                agregarTexto("> Profundidad alcanzada: "+profundidad);
                 ramificacionMedio=(double)cantidadDeNodosExplorados/(double)calcularProfundidad(revisar);
-                System.out.println("> Ramificacion Medio= "+ramificacionMedio);            
-                System.out.println("> Perfil de Ramificacion: ");
+                agregarTexto("> Ramificacion Medio= "+ramificacionMedio);            
+                agregarTexto("> Perfil de Ramificacion: ");
                 
                 imprimirPerfilRamificacion(profundidad,listaCerrada ); 
                 return revisar;
