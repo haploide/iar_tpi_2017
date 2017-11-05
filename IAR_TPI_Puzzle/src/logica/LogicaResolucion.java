@@ -82,7 +82,7 @@ public class LogicaResolucion {
         Nodo revisar=listaAbierta.remove(0);//asigna el nodo inicial al nodo que vamos a revisar
         double ramificacionMedio=0;
         
-        while(cantidadDeNodosExplorados<MAXNodosExplorados&&profundidad<=MAXProfundidad){           
+        while(cantidadDeNodosExplorados<MAXNodosExplorados){           
            // Nodo revisar=nodosExplorados.remove(0);//lo que hacemos es ir sacando del ArrayList a cada nodo para despues poder compararlo con la ConfFinal 
            //el nodo que vamos a sacar es el que esta en la primera posicion, por ende se va a comportar como una COLA (FIFO)
             cantidadDeNodosExplorados++;
@@ -115,7 +115,7 @@ public class LogicaResolucion {
                 int arriba=hijo.getEstado()[posicionDelCero[0]-1][posicionDelCero[1]];//capturamos el valor que esta en la fila de arriba de esa columna en la variable arriba
                 hijo.getEstado()[posicionDelCero[0]][posicionDelCero[1]]=arriba;//metemos en la posicion donde estaba el cero, el valor que estaba en la fila de arriba
                 hijo.getEstado()[posicionDelCero[0]-1][posicionDelCero[1]]=0;//metemos en la fila de arriba el cero               
-                if(!nodoRevisado(listaCerrada,hijo))//el metodo verifica si el hijo que estamos por expandir ya fue creado por otro nodo, si es asi no lo expandimos porque ya fue creado(ahorramos movimientos, no repetimos nodos)
+                if(!nodoRevisado(listaCerrada,hijo,listaAbierta))//el metodo verifica si el hijo que estamos por expandir ya fue creado por otro nodo, si es asi no lo expandimos porque ya fue creado(ahorramos movimientos, no repetimos nodos)
                 { 
                     hijo.setPadre(revisar);//creamos punteros a “revisar” en todos sus sucesores, de forma que pueda conocerse en todos ellos la identidad de su antecesor
                     //si no le asignamos un padre a cada hijo no vamos a poder usar el metodo imprimirPerfilRamificacion
@@ -132,7 +132,7 @@ public class LogicaResolucion {
                 int abajo=hijo.getEstado()[posicionDelCero[0]+1][posicionDelCero[1]];//capturamos el valor que esta en la fila de abajo del cero
                 hijo.getEstado()[posicionDelCero[0]][posicionDelCero[1]]=abajo;
                 hijo.getEstado()[posicionDelCero[0]+1][posicionDelCero[1]]=0;               
-                if(!nodoRevisado(listaCerrada,hijo))
+                if(!nodoRevisado(listaCerrada,hijo,listaAbierta))
                 {
                     hijo.setPadre(revisar);
                     listaAbierta.add(hijo);
@@ -149,7 +149,7 @@ public class LogicaResolucion {
                 hijo.getEstado()[posicionDelCero[0]][posicionDelCero[1]]=izquierda;//metemos en la posicion donde estaba el cero, el valor que estaba en la fila de arriba
                 hijo.getEstado()[posicionDelCero[0]][posicionDelCero[1]-1]=0;//metemos en la fila de arriba el cero
                
-                if(!nodoRevisado(listaCerrada,hijo))
+                if(!nodoRevisado(listaCerrada,hijo,listaAbierta))
                 {
                     hijo.setPadre(revisar);
                     listaAbierta.add(hijo);
@@ -164,7 +164,7 @@ public class LogicaResolucion {
                 int derecha=hijo.getEstado()[posicionDelCero[0]][posicionDelCero[1]+1];//capturamos el valor que esta en la fila de abajo del cero
                 hijo.getEstado()[posicionDelCero[0]][posicionDelCero[1]]=derecha;
                 hijo.getEstado()[posicionDelCero[0]][posicionDelCero[1]+1]=0;               
-                if(!nodoRevisado(listaCerrada,hijo))
+                if(!nodoRevisado(listaCerrada,hijo,listaAbierta))
                 {
                     hijo.setPadre(revisar);
                     listaAbierta.add(hijo);
@@ -175,8 +175,11 @@ public class LogicaResolucion {
             }
            revisar.setHijos(hijos);//le pasamos la lista de hijos a un nodo padre
            //usamos el Nodo revisar porque es el Padre de esos nodos hijos
-            revisar=listaAbierta.remove(0);
-            profundidad=calcularProfundidad(revisar);
+            do {   
+                if (listaAbierta.isEmpty()){return null;}
+                revisar=listaAbierta.remove(0);//sacamos el ultimo nodo de la lista, es decir la convertimos en una PILA(FIFO)
+                profundidad=calcularProfundidad(revisar);
+            } while (profundidad==MAXProfundidad);
             
         }
         return null;
@@ -225,9 +228,15 @@ public class LogicaResolucion {
         return clon;
     }
 
-    public static boolean nodoRevisado(ArrayList<Nodo> listaCerrada, Nodo hijo) {
+    public static boolean nodoRevisado(ArrayList<Nodo> listaCerrada, Nodo hijo, ArrayList<Nodo> listaAbierta) {
         
         for(Nodo revisado:listaCerrada){ //lo que hacemos es recorrer todo el arraylist "nodosYaRevisados" y comparamos con el siguinte if
+          if(Arrays.deepEquals(revisado.getEstado(), hijo.getEstado()))  //si dentro de revisado existe algun nodo igual al nodo hijo que se esta comparando
+          {
+              return true;
+          }                
+        }
+        for(Nodo revisado:listaAbierta){ //lo que hacemos es recorrer todo el arraylist "nodosYaRevisados" y comparamos con el siguinte if
           if(Arrays.deepEquals(revisado.getEstado(), hijo.getEstado()))  //si dentro de revisado existe algun nodo igual al nodo hijo que se esta comparando
           {
               return true;
@@ -246,7 +255,7 @@ public class LogicaResolucion {
         double ramificacionMedio=0;      
         Nodo revisar=listaAbierta.remove(listaAbierta.size()-1);//con esto hacemos de cuenta que el ArrayList es una Pila(LIFO)
        
-        while(cantidadDeNodosExplorados<MAXNodosExplorados&&profundidad<=MAXProfundidad)
+        while(cantidadDeNodosExplorados<MAXNodosExplorados)
         {   
             cantidadDeNodosExplorados++;
             imprimirEstadoNodoRevisado(revisar,revisar.getEstado(),cantidadDeNodosExplorados);
@@ -274,14 +283,15 @@ public class LogicaResolucion {
                 int arriba=hijo.getEstado()[posicionDelCero[0]-1][posicionDelCero[1]];
                 hijo.getEstado()[posicionDelCero[0]][posicionDelCero[1]]=arriba; 
                 hijo.getEstado()[posicionDelCero[0]-1][posicionDelCero[1]]=0;                
-                if(!nodoRevisado(listaCerrada,hijo)) 
+                if(!nodoRevisado(listaCerrada,hijo,listaAbierta)) 
                 {
                     hijo.setPadre(revisar);
                     listaAbierta.add(hijo);
                     profundidad=calcularProfundidad(hijo);
                     hijo.setProfundidad(profundidad);
+                    hijos.add(hijo);
                 }               
-                hijos.add(hijo);
+                
             }            
              if(posicionDelCero[1]!=0)                       
             {
@@ -289,14 +299,15 @@ public class LogicaResolucion {
                 int izquierda=hijo.getEstado()[posicionDelCero[0]][posicionDelCero[1]-1]; 
                 hijo.getEstado()[posicionDelCero[0]][posicionDelCero[1]]=izquierda;
                 hijo.getEstado()[posicionDelCero[0]][posicionDelCero[1]-1]=0;
-                if(!nodoRevisado(listaCerrada,hijo))
+                if(!nodoRevisado(listaCerrada,hijo,listaAbierta))
                 {
                     hijo.setPadre(revisar);
                     listaAbierta.add(hijo);
                     profundidad=calcularProfundidad(hijo);
                     hijo.setProfundidad(profundidad);
+                    hijos.add(hijo);
                 }                          
-                 hijos.add(hijo);
+                 
             }           
              if(posicionDelCero[1]!=2)                  
             {
@@ -304,14 +315,15 @@ public class LogicaResolucion {
                 int derecha=hijo.getEstado()[posicionDelCero[0]][posicionDelCero[1]+1];
                 hijo.getEstado()[posicionDelCero[0]][posicionDelCero[1]]=derecha;
                 hijo.getEstado()[posicionDelCero[0]][posicionDelCero[1]+1]=0;
-                if(!nodoRevisado(listaCerrada,hijo))
+                if(!nodoRevisado(listaCerrada,hijo,listaAbierta))
                 {
                     hijo.setPadre(revisar);
                     listaAbierta.add(hijo);
                     profundidad=calcularProfundidad(hijo);
                     hijo.setProfundidad(profundidad);
+                    hijos.add(hijo);
                 }                  
-                 hijos.add(hijo);
+                 
             }          
              if(posicionDelCero[0]!=2)                       
             {
@@ -319,21 +331,26 @@ public class LogicaResolucion {
                 int abajo=hijo.getEstado()[posicionDelCero[0]+1][posicionDelCero[1]];//capturamos el valor que esta en la fila de abajo del cero
                 hijo.getEstado()[posicionDelCero[0]][posicionDelCero[1]]=abajo;
                 hijo.getEstado()[posicionDelCero[0]+1][posicionDelCero[1]]=0;
-                if(!nodoRevisado(listaCerrada,hijo))
+                if(!nodoRevisado(listaCerrada,hijo,listaAbierta))
                 {
                     hijo.setPadre(revisar);
                     listaAbierta.add(hijo);
                     profundidad=calcularProfundidad(hijo);
                     hijo.setProfundidad(profundidad);
+                    hijos.add(hijo);
                 }               
-                 hijos.add(hijo);
+                 
             }
             
            
              
-           revisar.setHijos(hijos);
-           revisar=listaAbierta.remove(listaAbierta.size()-1);//sacamos el ultimo nodo de la lista, es decir la convertimos en una PILA(FIFO)
-           profundidad=calcularProfundidad(revisar);
+            revisar.setHijos(hijos);
+            do {   
+                if (listaAbierta.isEmpty()){return null;}
+                revisar=listaAbierta.remove(listaAbierta.size()-1);//sacamos el ultimo nodo de la lista, es decir la convertimos en una PILA(FIFO)
+                profundidad=calcularProfundidad(revisar);
+            } while (profundidad==MAXProfundidad);        
+           
            
         }
         return null;
@@ -353,7 +370,7 @@ public class LogicaResolucion {
         costo=calcularCosto(revisar.getEstado(), ConfFinal);
         revisar.setCostoTotal(costo);
         
-       while(cantidadDeNodosExplorados<MAXNodosExplorados&&profundidad<=MAXProfundidad)
+       while(cantidadDeNodosExplorados<MAXNodosExplorados)
         {        
             cantidadDeNodosExplorados++;
             imprimirEstadoNodoPMejorCostos(revisar.getEstado(),revisar.getCostoTotal(),revisar,cantidadDeNodosExplorados);
@@ -447,8 +464,11 @@ public class LogicaResolucion {
            revisar.setHijos(hijos);
            
            Collections.sort(listaAbierta);//Ordena el ArrayList de acuerdo al "COSTO", asi el nodo hijo con menor costo se ubica primero para salir
-           revisar=listaAbierta.remove(0);
-           profundidad=calcularProfundidad(revisar);
+           do {   
+                if (listaAbierta.isEmpty()){return null;}
+                revisar=listaAbierta.remove(0);//sacamos el ultimo nodo de la lista, es decir la convertimos en una PILA(FIFO)
+                profundidad=calcularProfundidad(revisar);
+            } while (profundidad==MAXProfundidad);   
            
         }
         return null;
@@ -613,8 +633,12 @@ public class LogicaResolucion {
            revisar.setHijos(hijos);
            
            Collections.sort(listaAbierta);//Ordena el ArrayList de acuerdo al "COSTO", asi el nodo hijo con menor costo se ubica primero para salir
-           revisar=listaAbierta.remove(0);
-           profMax=calcularProfundidad(revisar);          
+             
+           do {   
+                if (listaAbierta.isEmpty()){return null;}
+                revisar=listaAbierta.remove(0);
+                profMax=calcularProfundidad(revisar); 
+            } while (profMax==MAXProfundidad); 
         }
         return null;
     }
